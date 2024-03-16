@@ -25,6 +25,9 @@
 double
 __rint (double x)
 {
+#if __GNUC_PREREQ (14, 0) && defined __riscv_zfa
+  return __builtin_rint (x);
+#else
   bool nan;
   double mag;
 
@@ -48,6 +51,7 @@ __rint (double x)
     }
 
   return x;
+#endif
 }
 
 libm_alias_double (__rint, rint)

@@ -25,6 +25,9 @@
 double
 __ceil (double x)
 {
+#if __GNUC_PREREQ (14, 0) && defined __riscv_zfa
+  return __builtin_ceil (x);
+#else
   int flags = riscv_getflags ();
   bool nan = isnan (x);
   double mag = fabs (x);
@@ -48,6 +51,7 @@ __ceil (double x)
     }
 
   return x;
+#endif
 }
 
 libm_alias_double (__ceil, ceil)

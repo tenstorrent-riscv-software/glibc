@@ -25,6 +25,9 @@
 float
 __roundevenf (float x)
 {
+#if __GNUC_PREREQ (14, 0) && defined __riscv_zfa
+  return __builtin_roundevenf (x);
+#else
   int flags = riscv_getflags ();
   bool nan = isnan (x);
   float mag = fabsf (x);
@@ -48,6 +51,7 @@ __roundevenf (float x)
     }
 
   return x;
+#endif
 }
 
 libm_alias_float (__roundeven, roundeven)

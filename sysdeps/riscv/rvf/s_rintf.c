@@ -25,6 +25,9 @@
 float
 __rintf (float x)
 {
+#if __GNUC_PREREQ (14, 0) && defined __riscv_zfa
+  return __builtin_rintf (x);
+#else
   bool nan;
   float mag;
 
@@ -48,6 +51,7 @@ __rintf (float x)
     }
 
   return x;
+#endif
 }
 
 libm_alias_float (__rint, rint)
